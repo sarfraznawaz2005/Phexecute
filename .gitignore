@@ -1,4 +1,5 @@
 storage/data/snippets/*
+storage/temp/
 storage/temp/*
 /logs/*
 !/logs/README.md

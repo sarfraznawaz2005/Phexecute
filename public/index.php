@@ -33,7 +33,6 @@ $app->get('/', function () use ($app) {
     $snippetsDir = __DIR__ . '/../storage/data/snippets';
     $packageDir = __DIR__ . '/../storage/data/packages';
 
-    // get system commands
     $systemFiles = glob($systemDir . '/*.txt');
     $snippetFiles = glob($snippetsDir . '/*.txt');
     $packageFiles = glob($packageDir . '/*.txt');
