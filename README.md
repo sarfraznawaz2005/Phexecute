@@ -78,7 +78,7 @@ You can extend Phexecute to any level you want. For example, you can use it to c
 
 Please checkout text files in directories under **storage\data** to get an idea of how default menu entries are defined.
 
-**CAUTION**: Phexecute uses `eval` to run the code. It is strongly recommended that you should use it for local testing only and not on production server due to security reasons. If you do, you use it on your own risk.
+**`CAUTION`**: Phexecute uses `eval` to run the code. It is strongly recommended that you should use it for local testing only and not on production server due to security reasons. If you do, you use it on your own risk.
 
 ## Contribute ##
 
