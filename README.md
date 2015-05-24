@@ -74,7 +74,11 @@ For example here is how `phpinfo` entry is defined (in storage/data/system/01-ph
 
 **Note:** Please notice that extensions of those files should be **.txt** although you can name these files anything.
 
+You can extend Phexecute to any level you want. For example, you can use it to create automation commands, deploy scripts, run git commands, etc.
+
 Please checkout text files in directories under **storage\data** to get an idea of how default menu entries are defined.
+
+**CAUTION**: Phexecute uses `eval` to run the code. It is strongly recommended that you should use it for local testing only and not on production server due to security reasons. If you do, you use it on your own risk.
 
 ## Contribute ##
 
