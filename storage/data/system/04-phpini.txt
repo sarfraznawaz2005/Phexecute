@@ -1,0 +1,5 @@
+PHP INI
+---
+dump(ini_get_all());
+---
+true

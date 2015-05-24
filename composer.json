@@ -1,0 +1,31 @@
+{
+  "name": "sarfraznawaz2005/phexecute",
+  "description": "Phexecute is PHP code runner",
+  "license": "MIT",
+  "type": "project",
+  "keywords": [
+    "php",
+    "code"
+  ],
+  "authors": [
+    {
+      "name": "Sarfraz Ahmed",
+      "email": "sarfraznawaz2005@gmail.com",
+      "homepage": "https://codeinphp.github.io"
+    }
+  ],
+  "autoload": {
+    "classmap": ["packages"],
+    "files": ["files/functions.php"]
+  },
+  "require": {
+    "php": ">=5.3.0",
+    "slim/slim": "2.*",
+    "twig/twig": "1.*",
+    "slim/views": "0.*",
+    "monolog/monolog": "1.*",
+    "symfony/var-dumper": "*",
+    "squizlabs/php_codesniffer": "*",
+    "phpunit/phpunit": "~4.6"
+  }
+}

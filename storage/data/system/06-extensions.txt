@@ -1,0 +1,5 @@
+Loaded Extensions
+---
+dump(get_loaded_extensions(false));
+---
+true

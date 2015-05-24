@@ -1,0 +1,14 @@
+PHPUnit
+---
+// path to file OR directory to test
+$path = __DIR__ . '/../../storage/phpunit/tests';
+// path to phpunit executable
+$phpunit = __DIR__ . '/../../vendor/bin/phpunit';
+// run tests
+exec($phpunit . ' ' . $path . ' 2>&1', $result);
+// show results
+echo '<pre>';
+out($result);
+echo '</pre>';
+---
+true

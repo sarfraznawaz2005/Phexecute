@@ -1,0 +1,30 @@
+<style>
+    .ph_code {
+        display: none !important;
+    }
+</style>
+
+<div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    <span class="navbar-brand"><i class="fa fa-code"></i> Phexecute</span>
+</div>
+<!-- /.navbar-header -->
+
+{% include "layout/partials/menu.twig" %}
+
+<div class="code-buttons clearfix pull-right">
+    <button id="btnRun" data-placement="bottom" data-toggle="tooltip" data-original-title="Run Code (Ctrl + Shift)" type="button" class="btn btn-success pull-left">
+        <i class="fa fa-play"></i> Run
+    </button>
+    <button id="btnCheck" data-placement="bottom" data-toggle="tooltip" data-original-title="Run PHP CodeSniffer (Ctrl + Q)" type="button" class="btn btn-warning pull-left">
+        <i class="fa fa-check-circle"></i> Check
+    </button>
+    <button id="btnSave" data-placement="bottom" data-toggle="tooltip" data-original-title="Save Snippet" type="button" class="btn btn-info pull-left">
+        <i class="fa fa-heart"></i> Save
+    </button>
+</div>

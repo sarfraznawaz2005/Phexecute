@@ -1,0 +1,9 @@
+User-defined Functions
+---
+$functions = get_defined_functions();
+
+if(isset($functions['user'])) { 
+  dump($functions['user']); 
+};
+---
+true

@@ -1,0 +1,9 @@
+storage/data/snippets/*
+/logs/*
+!/logs/README.md
+/templates/cache/*
+!/templates/cache/README.md
+.DS_STORE
+composer.lock
+.idea
+.idea/*

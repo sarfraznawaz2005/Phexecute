@@ -1,0 +1,8 @@
+User-defined Constants
+---
+$constants = get_defined_constants(true);
+if(isset($constants['user'])) { 
+  dump($constants['user']); 
+};
+---
+true

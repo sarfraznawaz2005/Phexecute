@@ -1,0 +1,5 @@
+Include Path
+---
+echo print_r(get_include_path(), true);
+---
+true

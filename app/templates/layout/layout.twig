@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% include "layout/partials/head.twig" %}
+
+<body>
+
+<div id="wrapper">
+
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        {% include "layout/partials/nav.twig" %}
+    </nav>
+
+    <div class="header_stips progress" style="height: 2px;">
+        <div class="progress-bar progress-bar-info" style="width: 25%;"></div>
+        <div class="progress-bar progress-bar-success" style="width: 25%;"></div>
+        <div class="progress-bar progress-bar-warning" style="width: 25%;"></div>
+        <div class="progress-bar progress-bar-danger" style="width: 25%;"></div>
+    </div>
+
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12" style="margin: 0; padding: 0;">
+                    <div class="content">
+                        {{ block("body") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- general modal start -->
+<div id="modal-general" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+
+                <h3><i class="fa fa-info-circle"></i> Info</h3>
+            </div>
+            <div class="modal-body text-center" style="font-weight: bold; font-size: 14px;"></div>
+        </div>
+    </div>
+</div>
+<!-- general modal end -->
+
+<!-- general modal start -->
+<div id="modal-save" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+
+                <h3><i class="fa fa-bookmark"></i> Save Snippet</h3>
+            </div>
+            <div class="modal-body">
+                <label for="snippetName">Snippet Name</label>
+                <input autofocus type="text" id="snippetName" class="form-control"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close
+                </button>
+                <button type="button" id="btnSaveModal" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- general modal end -->
+
+
+{% include "layout/partials/footer.twig" %}
+
+</body>
+</html>

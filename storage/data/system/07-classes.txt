@@ -1,0 +1,5 @@
+Declared Classes
+---
+dump(get_declared_classes());
+---
+true
