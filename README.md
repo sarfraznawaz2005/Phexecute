@@ -1,10 +1,10 @@
 ## Introduction ##
 
-Phexecute is browser-based tool to quickly test/run some piece of PHP code. It comes with ability to easily check your code with [PHP Code_Sniffer][1], run PHPUnit or SimpleTest tests and more, all **inside the browser**. Phexecute can dramatically improve development time when something needs to be tested. Extending Phexecute to add your own packages/modules is also extremely easy.
+Phexecute is browser-based tool to quickly test/run PHP code. It comes with ability to easily check your code with [PHP Code_Sniffer][1], run **PHPUnit** or **SimpleTest** tests and more, all **inside the browser**. Phexecute can dramatically improve development time when something needs to be tested. Extending Phexecute to add your own packages/modules is also extremely easy.
 
 ## Features ##
 
- - PHP Code_Sniffer to easily identify problematic parts of code and ability to fix them (through PSR-2)
+ - PHP Code_Sniffer to easily identify and fix problematic parts of code (through PSR-2)
  - Run PHPUnit tests and see results right inside browser
  - Run SimpleTest tests
  - Uses Symfony VarDumper component easy visualization of vars, arrays, objects
@@ -46,7 +46,7 @@ You can [download][3] it directly OR install via composer:
 
 Adding your own packages is extremely simple so much so that you don't need to write single line of PHP code.
 
-By default, Phexecute has three menu items **System**, **Packages** and **Snippets**. They come from pure text files that can be found in **storage\data** folder respectively. Should you need to add your own menu entry, simple create a text file in any of those three directories and it will auto-magically appear in Phexecute menu.
+By default, Phexecute has three menu items **System**, **Packages** and **Snippets**. They come from pure text files that can be found in **storage\data** folder respectively. Should you need to add your own menu entry, simply create a text file in any of those three directories and it will auto-magically appear in Phexecute menu.
 
 The format for a text file is:
 
