@@ -1,5 +1,4 @@
 app/templates/cache/*
-storage/data/snippets/*
 storage/temp/
 storage/temp/*
 /logs/*

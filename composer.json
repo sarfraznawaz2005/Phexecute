@@ -27,6 +27,7 @@
     "symfony/var-dumper": "*",
     "squizlabs/php_codesniffer": "*",
     "phpunit/phpunit": "~4.6",
-    "pimple/pimple": "*"
+    "pimple/pimple": "*",
+    "fzaninotto/faker": "*"
   }
 }
