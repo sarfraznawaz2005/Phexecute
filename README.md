@@ -43,6 +43,10 @@ You can [download][3] it directly OR install via composer:
 
 `composer create-project -n -s dev sarfraznawaz2005/phexecute`
 
+## Using Composer Packages inside Phexecute ##
+
+Any packages that you install via composer are automatically available inside Phexecute. For example, `dump` function comes from `symfony/var-dumper` package specified in composer.json file and we can use it diretly inside Phexecute like `dump($var)`. So any packages specified in composer.json file are available for you to use them directly inside Phexecute code editor.
+
 ## Adding Custom Packages ##
 
 Adding your own packages is extremely simple so much so that you don't need to write single line of PHP code.
