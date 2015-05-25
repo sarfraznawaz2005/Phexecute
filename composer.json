@@ -28,6 +28,7 @@
     "squizlabs/php_codesniffer": "*",
     "phpunit/phpunit": "~4.6",
     "pimple/pimple": "*",
-    "fzaninotto/faker": "*"
+    "fzaninotto/faker": "*",
+    "devster/ubench": "~1.1.1"
   }
 }
