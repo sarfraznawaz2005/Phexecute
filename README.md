@@ -1,6 +1,6 @@
 ## Introduction ##
 
-Phexecute is browser-based tool to quickly test/run PHP code. It comes with ability to easily check your code with [PHP Code_Sniffer][1], run **PHPUnit** or **SimpleTest** tests and more, all **inside the browser**. Phexecute can dramatically improve development time when something needs to be tested. Extending Phexecute to add your own packages/modules is also extremely easy. This essentially means you can extend Phexecute to any level you want by adding your packages and use them in Phexecute code editor.
+Phexecute is browser-based tool to quickly test/run PHP code. It comes with ability to easily check your code with [PHP Code_Sniffer][1], run **PHPUnit** or **SimpleTest** tests and more, all **inside the browser**. Phexecute can dramatically improve development time when something needs to be tested. Extending Phexecute to add your own packages/modules is also extremely easy. 
 
 ## Features ##
 
@@ -45,7 +45,7 @@ You can [download][3] it directly OR install via composer:
 
 ## Using Composer Packages inside Phexecute ##
 
-Any packages that you install via composer are automatically available inside Phexecute. For example, `dump` function comes from `symfony/var-dumper` package specified in composer.json file and we can use it directly inside Phexecute like `dump($var)`. So any packages specified in composer.json file are available for you to use them directly inside Phexecute code editor.
+Any packages that you install via composer are automatically available inside Phexecute. For example, `dump` function comes from `symfony/var-dumper` package specified in composer.json file and we can use it directly inside Phexecute like `dump($var)`. So any packages specified in composer.json file are available for you to use them directly inside Phexecute code editor. This essentially means you can extend Phexecute to any level you want by adding your packages and use them in Phexecute code editor.
 
 ## Adding Custom Packages ##
 
