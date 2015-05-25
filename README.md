@@ -15,19 +15,19 @@ Phexecute is browser-based tool to quickly test/run PHP code. It comes with abil
 
 Main Screen
 
-![Settings Window](https://raw.github.com/sarfraznawaz2005/phexecute/master/screenshots/main.png)
+![Main Window](https://raw.github.com/sarfraznawaz2005/phexecute/master/screenshots/main.png)
 
 PHP Code_Sniffer Results
 
-![Settings Window](https://raw.github.com/sarfraznawaz2005/phexecute/master/screenshots/codesniffer.png)
+![CodeSniffer Window](https://raw.github.com/sarfraznawaz2005/phexecute/master/screenshots/codesniffer.png)
 
 PHPUnit Results
 
-![Settings Window](https://raw.github.com/sarfraznawaz2005/phexecute/master/screenshots/phpunit.png)
+![PHPUnit Window](https://raw.github.com/sarfraznawaz2005/phexecute/master/screenshots/phpunit.png)
 
 SimpleTest Results
 
-![Settings Window](https://raw.github.com/sarfraznawaz2005/phexecute/master/screenshots/simpletest.png)
+![SimpleTest Window](https://raw.github.com/sarfraznawaz2005/phexecute/master/screenshots/simpletest.png)
 
 ---
 
