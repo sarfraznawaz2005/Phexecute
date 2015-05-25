@@ -1,6 +1,6 @@
 ## Introduction ##
 
-Phexecute is browser-based tool to quickly test/run PHP code. It comes with ability to easily check your code with [PHP Code_Sniffer][1], run **PHPUnit** or **SimpleTest** tests and more, all **inside the browser**. Phexecute can dramatically improve development time when something needs to be tested. Extending Phexecute to add your own packages/modules is also extremely easy.
+Phexecute is browser-based tool to quickly test/run PHP code. It comes with ability to easily check your code with [PHP Code_Sniffer][1], run **PHPUnit** or **SimpleTest** tests and more, all **inside the browser**. Phexecute can dramatically improve development time when something needs to be tested. Extending Phexecute to add your own packages/modules is also extremely easy. This essentially means you can extend Phexecute to any level you want by adding your packages and use them in Phexecute code editor.
 
 ## Features ##
 
