@@ -8,8 +8,9 @@ Phexecute is browser-based tool to quickly test/run PHP code. It comes with abil
  - Run PHPUnit tests and see results right inside browser
  - Run SimpleTest tests
  - Uses Symfony VarDumper component easy visualization of vars, arrays, objects
- - Ability to save snippets
+ - Ability to save unlimited snippets
  - Live PHP error highlighting
+ - Easy to extend
 
 ## Screenshots ##
 
