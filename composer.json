@@ -26,6 +26,7 @@
     "monolog/monolog": "1.*",
     "symfony/var-dumper": "*",
     "squizlabs/php_codesniffer": "*",
-    "phpunit/phpunit": "~4.6"
+    "phpunit/phpunit": "~4.6",
+    "pimple/pimple": "*"
   }
 }
