@@ -1,0 +1,24 @@
+Pimple Example
+---
+////////////////////////////////////////////////////
+// Pimple Example
+////////////////////////////////////////////////////
+use Pimple\Container;
+
+class Foo {
+   public function bar() {
+      return "Iam bar!";
+   }
+}
+
+$container = new Container();
+
+// define our services
+$container['foo'] = function ($c) {
+    return new Foo;
+};
+
+$foo = $container['foo'];
+echo $foo->bar();
+---
+false
