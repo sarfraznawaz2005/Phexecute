@@ -91,7 +91,7 @@ Please feel free to fork and modify/extend Phexecute and send a pull request wit
 
 ## Donation?##
 
-In order to donate, please go to [this page][6] and input email address sarfraznawaz2005@hotmail.com and proceed with your donation information. Thanks!
+In order to donate, please go to [this page][6] and proceed with your donation information. Thanks!
 
 ## License ##
 
@@ -123,5 +123,5 @@ SOFTWARE.
   [3]: https://github.com/sarfraznawaz2005/Phexecute/archive/master.zip
   [4]: https://github.com/squizlabs/PHP_CodeSniffer
   [5]: https://github.com/sarfraznawaz2005/Phexecute/issues
-  [6]: https://load.payoneer.com/LoadToPage.aspx
+  [6]: https://load.payoneer.com/LoadToPage.aspx?email=sarfraznawaz2005@hotmail.com&amount=20
   [7]: https://github.com/sarfraznawaz2005/Phexecute/graphs/contributors
