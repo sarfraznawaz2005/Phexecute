@@ -260,3 +260,19 @@ $('.code_entry a').click(function () {
         runCode();
     }
 });
+
+// delete snippets
+$('ul.code_entry i.fa-remove').click(function(){
+	var name = $(this).data('name');
+	var $li = $(this).closest('li');
+	
+	if (confirm('Are you sure you want to delete this snippet ?')) {
+		$.post('http/delete.php', {"name": name}, function (result) {
+			if (result) {
+				$li.remove();
+			}
+		});	
+	}
+	
+	return false;
+});
