@@ -32,7 +32,7 @@
             <ul class="dropdown-menu code_entry">
                 {% for entry in snippet_entries %}
                     <li>
-                        <a href="javascript:void(0);"><i class="fa fa-remove" data-name="{{ entry.name }}"></i> {{ entry.name }}</a><span rel="{{ entry.autorun }}" class="ph_code">{{ entry.code }}</span>
+                        <a href="javascript:void(0);"><i class="fa fa-times" data-name="{{ entry.name }}"></i> {{ entry.name }}</a><span rel="{{ entry.autorun }}" class="ph_code">{{ entry.code }}</span>
                     </li>
                 {% endfor %}
             </ul>

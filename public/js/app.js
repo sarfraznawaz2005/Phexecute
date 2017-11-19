@@ -262,7 +262,7 @@ $('.code_entry a').click(function () {
 });
 
 // delete snippets
-$('ul.code_entry i.fa-remove').click(function(){
+$('ul.code_entry i.fa-times').click(function(){
 	var name = $(this).data('name');
 	var $li = $(this).closest('li');
 	
