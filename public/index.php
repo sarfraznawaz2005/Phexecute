@@ -40,6 +40,7 @@ $app->get('/', function () use ($app) {
     $data['package_entries'] = buildMenu($packageFiles);
 
     // snippets
+    $data['snippet_entries'] = [];
     $snippets = dirToArray($snippetsDir);
 
     if (isset($snippets[0])) {
@@ -50,8 +51,11 @@ $app->get('/', function () use ($app) {
         $data['snippet_entries'][$folder] = buildMenu($snippet, $folder);
     }
 
-    asort($data['snippet_entries']);
-    //pp($data['snippet_entries']);
+	if ($data['snippet_entries']) {
+		asort($data['snippet_entries']);
+		//pp($data['snippet_entries']);	
+	}
+
 
     $app->render('home.twig', $data);
 });
@@ -60,7 +64,7 @@ function buildMenu($files, $folderName = '')
 {
     $menu = array();
 
-    if (!empty($files)) {
+    if (!empty($files) && is_array($files)) {
         foreach ($files as $folder => $file) {
 
             if (!file_exists($file)) {
