@@ -45,7 +45,7 @@ class Person extends \Faker\Provider\Person
         'Mariana', 'Mariangel', 'Martina', 'María', 'María Alejandra', 'María Camila', 'María Fernanda', 'María José', 'María Paula', 'Micaela', 'Michelle', 'Miranda',
         'Montserrat', 'Mía', 'Nadia', 'Natalia', 'Nicole', 'Oliva', 'Olivia', 'Ornela', 'Paula', 'Paulina', 'Rafaela', 'Rebeca',
         'Regina', 'Renata', 'Romina', 'Salomé', 'Samantha', 'Sara', 'Silvana ', 'Sofía', 'Sophie', 'Valentina', 'Valeria', 'Valery ',
-        'Victoria', 'Violeta', 'Zoe', 'Aitana', 'Sara Sofía', 'Ximena/Jimena',
+        'Victoria', 'Violeta', 'Zoe', 'Aitana', 'Sara Sofía', 'Ximena', 'Jimena',
     );
 
     protected static $lastName = array(
@@ -76,7 +76,7 @@ class Person extends \Faker\Provider\Person
 
     protected static $titleMale = array('Sr.', 'Dn.', 'Dr.', 'Lic.', 'Ing.');
 
-    protected static $titleFemale = array('Sra.', 'Srita.', 'Dr.', 'Lic.', 'Ing.');
+    protected static $titleFemale = array('Sra.', 'Srta.', 'Dra.', 'Lic.', 'Ing.');
 
     protected static $suffix = array('Hijo');
 
@@ -86,5 +86,21 @@ class Person extends \Faker\Provider\Person
     public static function suffix()
     {
         return static::randomElement(static::$suffix);
+    }
+    
+    
+    /**
+     * Generate a Documento Nacional de Identidad (DNI) number
+     *
+     * Doesn't include a checksum, as peruvians commonly use only the first
+     * 8 digits.
+     *
+     * @example '83367512'
+     *
+     * @link http://www2.sunat.gob.pe/pdt/pdtModulos/independientes/p695/TipoDoc.htm
+     */
+    public static function dni()
+    {
+        return static::numerify('########');
     }
 }

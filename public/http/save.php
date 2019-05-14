@@ -1,10 +1,17 @@
 <?php
 $code = urldecode($_POST['code']);
 $name = $_POST['name'];
+$categoryName = $_POST['categoryName'];
 
-if ($code && $name) {
+if ($code && $name && $categoryName) {
     $sep = PHP_EOL . '---' . PHP_EOL;
-    $snippetsFile = __DIR__ . '/../../storage/data/snippets/' . $name . '.txt';
+
+    @mkdir(__DIR__ . '/../../storage/data/snippets/');
+
+    $dir = __DIR__ . '/../../storage/data/snippets/' . $categoryName;
+    @mkdir($dir, 0777);
+
+    $snippetsFile = $dir . '/' . $name . '.txt';
 
     $data = $name . $sep . $code . $sep . 'false';
 

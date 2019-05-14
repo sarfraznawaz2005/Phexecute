@@ -9,14 +9,6 @@
  */
 
 /**
- *
- *
- * @package    PHPUnit
- * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @author     Bernhard Schussek <bschussek@2bepublished.at>
- * @copyright  Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
- * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.0.0
  */
 class Framework_ConstraintTest extends PHPUnit_Framework_TestCase
@@ -624,28 +616,28 @@ EOF
 
     public function isEqualProvider()
     {
-        $a = new stdClass;
+        $a      = new stdClass;
         $a->foo = 'bar';
-        $b = new stdClass;
-        $ahash = spl_object_hash($a);
-        $bhash = spl_object_hash($b);
+        $b      = new stdClass;
+        $ahash  = spl_object_hash($a);
+        $bhash  = spl_object_hash($b);
 
-        $c = new stdClass;
-        $c->foo = 'bar';
-        $c->int = 1;
-        $c->array = array(0, array(1), array(2), 3);
-        $c->related = new stdClass;
+        $c               = new stdClass;
+        $c->foo          = 'bar';
+        $c->int          = 1;
+        $c->array        = array(0, array(1), array(2), 3);
+        $c->related      = new stdClass;
         $c->related->foo = "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk";
-        $c->self = $c;
-        $c->c = $c;
-        $d = new stdClass;
-        $d->foo = 'bar';
-        $d->int = 2;
-        $d->array = array(0, array(4), array(2), 3);
-        $d->related = new stdClass;
+        $c->self         = $c;
+        $c->c            = $c;
+        $d               = new stdClass;
+        $d->foo          = 'bar';
+        $d->int          = 2;
+        $d->array        = array(0, array(4), array(2), 3);
+        $d->related      = new stdClass;
         $d->related->foo = "a\np\nc\nd\ne\nf\ng\nh\ni\nw\nk";
-        $d->self = $d;
-        $d->c = $c;
+        $d->self         = $d;
+        $d->c            = $c;
 
         $storage1 = new SplObjectStorage;
         $storage1->attach($a);
@@ -655,10 +647,10 @@ EOF
         $storage1hash = spl_object_hash($storage1);
         $storage2hash = spl_object_hash($storage2);
 
-        $dom1 = new DOMDocument;
+        $dom1                     = new DOMDocument;
         $dom1->preserveWhiteSpace = false;
         $dom1->loadXML('<root></root>');
-        $dom2 = new DOMDocument;
+        $dom2                     = new DOMDocument;
         $dom2->preserveWhiteSpace = false;
         $dom2->loadXML('<root><foo/></root>');
 
@@ -825,8 +817,8 @@ Failed asserting that two DateTime objects are equal.
 --- Expected
 +++ Actual
 @@ @@
--2013-03-29T04:13:35-0400
-+2013-03-29T04:13:35-0500
+-2013-03-29T04:13:35.000000-0400
++2013-03-29T04:13:35.000000-0500
 
 EOF
             ),
@@ -864,14 +856,12 @@ Failed asserting that two objects are equal.
 -        'obj' => stdClass Object &$ahash (
 -            'foo' => 'bar'
 -        )
--        'inf' => null
--    )
--    '$bhash' => Array &1 (
 +SplObjectStorage Object &$storage2hash (
 +    '$bhash' => Array &0 (
-         'obj' => stdClass Object &$bhash ()
++        'obj' => stdClass Object &$bhash ()
          'inf' => null
      )
+-    '$bhash' => Array &0
  )
 
 EOF
@@ -1764,11 +1754,11 @@ EOF
         $this->assertTrue($constraint->evaluate(true, '', true));
         $this->assertFalse($constraint->evaluate(false, '', true));
 
-        $callback = array($this, 'callbackReturningTrue');
+        $callback   = array($this, 'callbackReturningTrue');
         $constraint = PHPUnit_Framework_Assert::callback($callback);
         $this->assertTrue($constraint->evaluate(false,  '', true));
 
-        $callback = array('Framework_ConstraintTest', 'staticCallbackReturningTrue');
+        $callback   = array('Framework_ConstraintTest', 'staticCallbackReturningTrue');
         $constraint = PHPUnit_Framework_Assert::callback($callback);
         $this->assertTrue($constraint->evaluate(null, '', true));
 
@@ -3026,7 +3016,7 @@ EOF
     {
         $object     = new StdClass;
         $constraint = new PHPUnit_Framework_Constraint_TraversableContains($object);
-        $this->assertStringMatchesFormat("contains stdClass Object &%s ()", $constraint->toString());
+        $this->assertStringMatchesFormat('contains stdClass Object &%s ()', $constraint->toString());
 
         $storage = new SplObjectStorage;
         $this->assertFalse($constraint->evaluate($storage, '', true));
@@ -3463,7 +3453,7 @@ EOF
     public function testConstraintException()
     {
         $constraint = new PHPUnit_Framework_Constraint_Exception('FoobarException');
-        $exception = new DummyException('Test');
+        $exception  = new DummyException('Test');
         $stackTrace = $exception->getTraceAsString();
 
         try {
@@ -3488,7 +3478,8 @@ EOF
     /**
      * Removes spaces in front of newlines
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return string
      */
     private function trimnl($string)

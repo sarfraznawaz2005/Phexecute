@@ -24,7 +24,7 @@ class HtmlFormatter extends NormalizerFormatter
     /**
      * Translates Monolog log levels to html color priorities.
      */
-    private $logLevels = array(
+    protected $logLevels = array(
         Logger::DEBUG     => '#cccccc',
         Logger::INFO      => '#468847',
         Logger::NOTICE    => '#3a87ad',
@@ -51,29 +51,30 @@ class HtmlFormatter extends NormalizerFormatter
      * @param  bool   $escapeTd false if td content must not be html escaped
      * @return string
      */
-    private function addRow($th, $td = ' ', $escapeTd = true)
+    protected function addRow($th, $td = ' ', $escapeTd = true)
     {
         $th = htmlspecialchars($th, ENT_NOQUOTES, 'UTF-8');
         if ($escapeTd) {
             $td = '<pre>'.htmlspecialchars($td, ENT_NOQUOTES, 'UTF-8').'</pre>';
         }
 
-        return "<tr style=\"padding: 4px;spacing: 0;text-align: left;\">\n<th style=\"background: #cccccc\" width=\"100px\">$th:</th>\n<td style=\"padding: 4px;spacing: 0;text-align: left;background: #eeeeee\">".$td."</td>\n</tr>";
+        return "<tr style=\"padding: 4px;text-align: left;\">\n<th style=\"vertical-align: top;background: #ccc;color: #000\" width=\"100\">$th:</th>\n<td style=\"padding: 4px;text-align: left;vertical-align: top;background: #eee;color: #000\">".$td."</td>\n</tr>";
     }
 
     /**
      * Create a HTML h1 tag
      *
-     * @param  string  $title Text to be in the h1
-     * @param  integer $level Error level
+     * @param  string $title Text to be in the h1
+     * @param  int    $level Error level
      * @return string
      */
-    private function addTitle($title, $level)
+    protected function addTitle($title, $level)
     {
         $title = htmlspecialchars($title, ENT_NOQUOTES, 'UTF-8');
 
         return '<h1 style="background: '.$this->logLevels[$level].';color: #ffffff;padding: 5px;" class="monolog-output">'.$title.'</h1>';
     }
+
     /**
      * Formats a log record.
      *

@@ -1,7 +1,10 @@
 #!/usr/bin/env sh
-SRC_DIR="`pwd`"
-cd "`dirname "$0"`"
-cd "../phpunit/phpunit"
-BIN_TARGET="`pwd`/phpunit"
-cd "$SRC_DIR"
-"$BIN_TARGET" "$@"
+
+dir=$(cd "${0%[/\\]*}" > /dev/null; cd "../phpunit/phpunit" && pwd)
+
+if [ -d /proc/cygdrive ] && [[ $(which php) == $(readlink -n /proc/cygdrive)/* ]]; then
+   # We are in Cgywin using Windows php, so the path must be translated
+   dir=$(cygpath -m "$dir");
+fi
+
+"${dir}/phpunit" "$@"

@@ -58,6 +58,14 @@
                 <h3><i class="fa fa-bookmark"></i> Save Snippet</h3>
             </div>
             <div class="modal-body">
+                <label for="categoryName">Category Name</label>
+                <select class="form-control" id="categoryName" autofocus style="width: 100%">
+                    <option value="">Choose</option>
+                    {% for key,items in snippet_entries %}
+                        <option value="{{key}}">{{key}}</option>
+                    {% endfor %}
+                </select>
+                <br/><br/>
                 <label for="snippetName">Snippet Name</label>
                 <input autofocus type="text" id="snippetName" class="form-control"/>
             </div>
@@ -71,8 +79,59 @@
 </div>
 <!-- general modal end -->
 
+<!-- general modal start -->
+<div id="modal-snippets" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+
+                <h3><i class="fa fa-bookmark"></i> Snippets</h3>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="search" onkeyup="search()" class="form-control" placeholder="Search Snippets" style="width:100%;">
+                <br>
+
+                {% for key,items in snippet_entries %}
+                    <div class="label label-success" style="font-size:14px;">{{key}}</div>                    
+                    
+                    <ul class="code_entry" id="list-search" style="list-style:none; margin-top:10px;">
+                    {% for item in items %}                        
+                        <li>
+                            <i class="fa fa-trash btn btn-danger btn-sm" data-folder="{{key}}" data-name="{{ item.name }}"></i> 
+                            <span class="badge badge-info" style="font-size:14px; background:#eee;">
+                                <a href="javascript:void(0);" style="color:#333;">{{ item.name }}</a>
+                            </span>
+                            <span rel="false" class="ph_code">{{ item.code }}</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endfor %}                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- general modal end -->
 
 {% include "layout/partials/footer.twig" %}
+
+<script>
+function search() {
+    var filter = $('#search').val(), count = 0;
+
+    $("#list-search li").each(function () {
+        if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+            $(this).hide('fast');
+        } else {
+            $(this).show();
+            count++;
+        }
+    });
+
+    return false;
+}
+</script>
 
 </body>
 </html>

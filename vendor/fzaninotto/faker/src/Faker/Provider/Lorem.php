@@ -2,7 +2,7 @@
 
 namespace Faker\Provider;
 
-class Lorem extends \Faker\Provider\Base
+class Lorem extends Base
 {
     protected static $wordList = array(
         'alias', 'consequatur', 'aut', 'perferendis', 'sit', 'voluptatem',
@@ -46,6 +46,7 @@ class Lorem extends \Faker\Provider\Base
 
     /**
      * @example 'Lorem'
+     * @return string
      */
     public static function word()
     {
@@ -67,15 +68,15 @@ class Lorem extends \Faker\Provider\Base
             $words []= static::word();
         }
 
-        return $asText ? join(' ', $words) : $words;
+        return $asText ? implode(' ', $words) : $words;
     }
 
     /**
      * Generate a random sentence
      *
-      * @example 'Lorem ipsum dolor sit amet.'
-     * @param  integer $nbWords         around how many words the sentence should contain
-     * @param  boolean $variableNbWords set to false if you want exactly $nbWords returned,
+     * @example 'Lorem ipsum dolor sit amet.'
+     * @param integer $nbWords         around how many words the sentence should contain
+     * @param boolean $variableNbWords set to false if you want exactly $nbWords returned,
      *                                  otherwise $nbWords may vary by +/-40% with a minimum of 1
      * @return string
      */
@@ -91,7 +92,7 @@ class Lorem extends \Faker\Provider\Base
         $words = static::words($nbWords);
         $words[0] = ucwords($words[0]);
 
-        return join($words, ' ') . '.';
+        return implode($words, ' ') . '.';
     }
 
     /**
@@ -109,15 +110,15 @@ class Lorem extends \Faker\Provider\Base
             $sentences []= static::sentence();
         }
 
-        return $asText ? join(' ', $sentences) : $sentences;
+        return $asText ? implode(' ', $sentences) : $sentences;
     }
 
     /**
      * Generate a single paragraph
      *
       * @example 'Sapiente sunt omnis. Ut pariatur ad autem ducimus et. Voluptas rem voluptas sint modi dolorem amet.'
-     * @param  integer $nbSentences         around how many sentences the paragraph should contain
-     * @param  boolean $variableNbSentences set to false if you want exactly $nbSentences returned,
+     * @param integer $nbSentences         around how many sentences the paragraph should contain
+     * @param boolean $variableNbSentences set to false if you want exactly $nbSentences returned,
      *                                      otherwise $nbSentences may vary by +/-40% with a minimum of 1
      * @return string
      */
@@ -130,7 +131,7 @@ class Lorem extends \Faker\Provider\Base
             $nbSentences = self::randomizeNbElements($nbSentences);
         }
 
-        return join(static::sentences($nbSentences), ' ');
+        return implode(static::sentences($nbSentences), ' ');
     }
 
     /**
@@ -148,63 +149,51 @@ class Lorem extends \Faker\Provider\Base
             $paragraphs []= static::paragraph();
         }
 
-        return $asText ? join("\n\n", $paragraphs) : $paragraphs;
+        return $asText ? implode("\n\n", $paragraphs) : $paragraphs;
     }
 
     /**
      * Generate a text string.
      * Depending on the $maxNbChars, returns a string made of words, sentences, or paragraphs.
      *
-      * @example 'Sapiente sunt omnis. Ut pariatur ad autem ducimus et. Voluptas rem voluptas sint modi dolorem amet.'
+     * @example 'Sapiente sunt omnis. Ut pariatur ad autem ducimus et. Voluptas rem voluptas sint modi dolorem amet.'
+     *
      * @param  integer $maxNbChars Maximum number of characters the text should contain (minimum 5)
+     *
      * @return string
      */
     public static function text($maxNbChars = 200)
     {
-        $text = array();
         if ($maxNbChars < 5) {
             throw new \InvalidArgumentException('text() can only generate text of at least 5 characters');
-        } elseif ($maxNbChars < 25) {
-            // join words
-            while (empty($text)) {
-                $size = 0;
-                // determine how many words are needed to reach the $maxNbChars once;
-                while ($size < $maxNbChars) {
-                    $word = ($size ? ' ' : '') . static::word();
-                    $text []= $word;
-                    $size += strlen($word);
-                }
-                array_pop($text);
-            }
-            $text[0][0] = static::toUpper($text[0][0]);
-            $text[count($text) - 1] .= '.';
-        } elseif ($maxNbChars < 100) {
-            // join sentences
-            while (empty($text)) {
-                $size = 0;
-                // determine how many sentences are needed to reach the $maxNbChars once;
-                while ($size < $maxNbChars) {
-                    $sentence = ($size ? ' ' : '') . static::sentence();
-                    $text []= $sentence;
-                    $size += strlen($sentence);
-                }
-                array_pop($text);
-            }
-        } else {
-            // join paragraphs
-            while (empty($text)) {
-                $size = 0;
-                // determine how many paragraphs are needed to reach the $maxNbChars once;
-                while ($size < $maxNbChars) {
-                    $paragraph = ($size ? "\n" : '') . static::paragraph();
-                    $text []= $paragraph;
-                    $size += strlen($paragraph);
-                }
-                array_pop($text);
-            }
         }
 
-        return join($text, '');
+        $type = ($maxNbChars < 25) ? 'word' : (($maxNbChars < 100) ? 'sentence' : 'paragraph');
+
+        $text = array();
+        while (empty($text)) {
+            $size = 0;
+
+            // until $maxNbChars is reached
+            while ($size < $maxNbChars) {
+                $word   = ($size ? ' ' : '') . static::$type();
+                $text[] = $word;
+
+                $size += strlen($word);
+            }
+
+            array_pop($text);
+        }
+
+        if ($type === 'word') {
+            // capitalize first letter
+            $text[0] = ucwords($text[0]);
+
+            // end sentence with full stop
+            $text[count($text) - 1] .= '.';
+        }
+
+        return implode($text, '');
     }
 
     protected static function randomizeNbElements($nbElements)

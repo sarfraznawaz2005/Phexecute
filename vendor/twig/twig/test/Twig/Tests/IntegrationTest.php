@@ -9,6 +9,20 @@
  * file that was distributed with this source code.
  */
 
+use Twig\Extension\AbstractExtension;
+use Twig\Extension\DebugExtension;
+use Twig\Extension\SandboxExtension;
+use Twig\Extension\StringLoaderExtension;
+use Twig\Node\Expression\ConstantExpression;
+use Twig\Node\PrintNode;
+use Twig\Sandbox\SecurityPolicy;
+use Twig\Test\IntegrationTestCase;
+use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+use Twig\TwigTest;
+
 // This function is defined to check that escaping strategies
 // like html works even if a function with the same name is defined.
 function html()
@@ -16,23 +30,23 @@ function html()
     return 'foo';
 }
 
-class Twig_Tests_IntegrationTest extends Twig_Test_IntegrationTestCase
+class Twig_Tests_IntegrationTest extends IntegrationTestCase
 {
     public function getExtensions()
     {
-        $policy = new Twig_Sandbox_SecurityPolicy(array(), array(), array(), array(), array());
+        $policy = new SecurityPolicy([], [], [], [], []);
 
-        return array(
-            new Twig_Extension_Debug(),
-            new Twig_Extension_Sandbox($policy, false),
-            new Twig_Extension_StringLoader(),
+        return [
+            new DebugExtension(),
+            new SandboxExtension($policy, false),
+            new StringLoaderExtension(),
             new TwigTestExtension(),
-        );
+        ];
     }
 
     public function getFixturesDir()
     {
-        return dirname(__FILE__).'/Fixtures/';
+        return __DIR__.'/Fixtures/';
     }
 }
 
@@ -46,7 +60,7 @@ class TwigTestFoo implements Iterator
     const BAR_NAME = 'bar';
 
     public $position = 0;
-    public $array = array(1, 2);
+    public $array = [1, 2];
 
     public function bar($param1 = null, $param2 = null)
     {
@@ -109,13 +123,13 @@ class TwigTestFoo implements Iterator
     }
 }
 
-class TwigTestTokenParser_§ extends Twig_TokenParser
+class TwigTestTokenParser_§ extends AbstractTokenParser
 {
-    public function parse(Twig_Token $token)
+    public function parse(Token $token)
     {
-        $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
+        $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
 
-        return new Twig_Node_Print(new Twig_Node_Expression_Constant('§', -1), -1);
+        return new PrintNode(new ConstantExpression('§', -1), -1);
     }
 
     public function getTag()
@@ -124,44 +138,52 @@ class TwigTestTokenParser_§ extends Twig_TokenParser
     }
 }
 
-class TwigTestExtension extends Twig_Extension
+class TwigTestExtension extends AbstractExtension
 {
     public function getTokenParsers()
     {
-        return array(
+        return [
             new TwigTestTokenParser_§(),
-        );
+        ];
     }
 
     public function getFilters()
     {
-        return array(
-            new Twig_SimpleFilter('§', array($this, '§Filter')),
-            new Twig_SimpleFilter('escape_and_nl2br', array($this, 'escape_and_nl2br'), array('needs_environment' => true, 'is_safe' => array('html'))),
-            new Twig_SimpleFilter('nl2br', array($this, 'nl2br'), array('pre_escape' => 'html', 'is_safe' => array('html'))),
-            new Twig_SimpleFilter('escape_something', array($this, 'escape_something'), array('is_safe' => array('something'))),
-            new Twig_SimpleFilter('preserves_safety', array($this, 'preserves_safety'), array('preserves_safety' => array('html'))),
-            new Twig_SimpleFilter('*_path', array($this, 'dynamic_path')),
-            new Twig_SimpleFilter('*_foo_*_bar', array($this, 'dynamic_foo')),
-        );
+        return [
+            new TwigFilter('§', [$this, '§Filter']),
+            new TwigFilter('escape_and_nl2br', [$this, 'escape_and_nl2br'], ['needs_environment' => true, 'is_safe' => ['html']]),
+            new TwigFilter('nl2br', [$this, 'nl2br'], ['pre_escape' => 'html', 'is_safe' => ['html']]),
+            new TwigFilter('escape_something', [$this, 'escape_something'], ['is_safe' => ['something']]),
+            new TwigFilter('preserves_safety', [$this, 'preserves_safety'], ['preserves_safety' => ['html']]),
+            new TwigFilter('static_call_string', 'TwigTestExtension::staticCall'),
+            new TwigFilter('static_call_array', ['TwigTestExtension', 'staticCall']),
+            new TwigFilter('magic_call', [$this, 'magicCall']),
+            new TwigFilter('magic_call_string', 'TwigTestExtension::magicStaticCall'),
+            new TwigFilter('magic_call_array', ['TwigTestExtension', 'magicStaticCall']),
+            new TwigFilter('*_path', [$this, 'dynamic_path']),
+            new TwigFilter('*_foo_*_bar', [$this, 'dynamic_foo']),
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
-            new Twig_SimpleFunction('§', array($this, '§Function')),
-            new Twig_SimpleFunction('safe_br', array($this, 'br'), array('is_safe' => array('html'))),
-            new Twig_SimpleFunction('unsafe_br', array($this, 'br')),
-            new Twig_SimpleFunction('*_path', array($this, 'dynamic_path')),
-            new Twig_SimpleFunction('*_foo_*_bar', array($this, 'dynamic_foo')),
-        );
+        return [
+            new TwigFunction('§', [$this, '§Function']),
+            new TwigFunction('safe_br', [$this, 'br'], ['is_safe' => ['html']]),
+            new TwigFunction('unsafe_br', [$this, 'br']),
+            new TwigFunction('static_call_string', 'TwigTestExtension::staticCall'),
+            new TwigFunction('static_call_array', ['TwigTestExtension', 'staticCall']),
+            new TwigFunction('*_path', [$this, 'dynamic_path']),
+            new TwigFunction('*_foo_*_bar', [$this, 'dynamic_foo']),
+        ];
     }
 
     public function getTests()
     {
-        return array(
-            new Twig_SimpleTest('multi word', array($this, 'is_multi_word')),
-        );
+        return [
+            new TwigTest('multi word', [$this, 'is_multi_word']),
+            new TwigTest('test_*', [$this, 'dynamic_test']),
+        ];
     }
 
     public function §Filter($value)
@@ -175,7 +197,7 @@ class TwigTestExtension extends Twig_Extension
     }
 
     /**
-     * nl2br which also escapes, for testing escaper filters
+     * nl2br which also escapes, for testing escaper filters.
      */
     public function escape_and_nl2br($env, $value, $sep = '<br />')
     {
@@ -183,7 +205,7 @@ class TwigTestExtension extends Twig_Extension
     }
 
     /**
-     * nl2br only, for testing filters with pre_escape
+     * nl2br only, for testing filters with pre_escape.
      */
     public function nl2br($value, $sep = '<br />')
     {
@@ -202,6 +224,11 @@ class TwigTestExtension extends Twig_Extension
         return $foo.'/'.$bar.'/'.$item;
     }
 
+    public function dynamic_test($element, $item)
+    {
+        return $element === $item;
+    }
+
     public function escape_something($value)
     {
         return strtoupper($value);
@@ -210,6 +237,11 @@ class TwigTestExtension extends Twig_Extension
     public function preserves_safety($value)
     {
         return strtoupper($value);
+    }
+
+    public static function staticCall($value)
+    {
+        return "*$value*";
     }
 
     public function br()
@@ -222,8 +254,94 @@ class TwigTestExtension extends Twig_Extension
         return false !== strpos($value, ' ');
     }
 
-    public function getName()
+    public function __call($method, $arguments)
     {
-        return 'integration_test';
+        if ('magicCall' !== $method) {
+            throw new \BadMethodCallException('Unexpected call to __call');
+        }
+
+        return 'magic_'.$arguments[0];
+    }
+
+    public static function __callStatic($method, $arguments)
+    {
+        if ('magicStaticCall' !== $method) {
+            throw new \BadMethodCallException('Unexpected call to __callStatic');
+        }
+
+        return 'static_magic_'.$arguments[0];
+    }
+}
+
+/**
+ * This class is used in tests for the "length" filter and "empty" test. It asserts that __call is not
+ * used to convert such objects to strings.
+ */
+class MagicCallStub
+{
+    public function __call($name, $args)
+    {
+        throw new \Exception('__call shall not be called');
+    }
+}
+
+class ToStringStub
+{
+    /**
+     * @var string
+     */
+    private $string;
+
+    public function __construct($string)
+    {
+        $this->string = $string;
+    }
+
+    public function __toString()
+    {
+        return $this->string;
+    }
+}
+
+/**
+ * This class is used in tests for the length filter and empty test to show
+ * that when \Countable is implemented, it is preferred over the __toString()
+ * method.
+ */
+class CountableStub implements \Countable
+{
+    private $count;
+
+    public function __construct($count)
+    {
+        $this->count = $count;
+    }
+
+    public function count()
+    {
+        return $this->count;
+    }
+
+    public function __toString()
+    {
+        throw new \Exception('__toString shall not be called on \Countables');
+    }
+}
+
+/**
+ * This class is used in tests for the length filter.
+ */
+class IteratorAggregateStub implements \IteratorAggregate
+{
+    private $data;
+
+    public function __construct(array $data)
+    {
+        $this->data = $data;
+    }
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->data);
     }
 }

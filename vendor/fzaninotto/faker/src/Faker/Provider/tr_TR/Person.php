@@ -2,6 +2,8 @@
 
 namespace Faker\Provider\tr_TR;
 
+use Faker\Calculator\TCNo;
+
 class Person extends \Faker\Provider\Person
 {
     /**
@@ -23,7 +25,7 @@ class Person extends \Faker\Provider\Person
 
     /**
      * @link http://www.guzelisimler.com/en_cok_aranan_erkek_isimleri.php
-     * 
+     *
      * @var array Turkish first names.
      */
     protected static $firstNameMale = array(
@@ -35,7 +37,7 @@ class Person extends \Faker\Provider\Person
 
     /**
      * @link http://www.guzelisimler.com/en_cok_aranan_kiz_isimleri.php
-     * 
+     *
      * @var array Turkish first names.
      */
     protected static $firstNameFemale = array(
@@ -44,7 +46,7 @@ class Person extends \Faker\Provider\Person
 
     /**
      * @link http://tr.wikipedia.org/wiki/Kategori:T%C3%BCrk%C3%A7e_soyadlar%C4%B1
-     * 
+     *
      * @var array Turkish last names.
      */
     protected static $lastName = array(
@@ -93,5 +95,18 @@ class Person extends \Faker\Provider\Person
     public static function titleFemale()
     {
         return static::titleMale();
+    }
+
+    /**
+     * National Personal Identity number (tc kimlik no)
+     * @link https://en.wikipedia.org/wiki/Turkish_Identification_Number
+     * @return string on format XXXXXXXXXXX
+     */
+    public function tcNo()
+    {
+        $randomDigits = static::numerify('#########');
+        $checksum = TCNo::checksum($randomDigits);
+
+        return $randomDigits . $checksum;
     }
 }

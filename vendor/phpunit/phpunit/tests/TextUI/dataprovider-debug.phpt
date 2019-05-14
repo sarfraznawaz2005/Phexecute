@@ -5,7 +5,7 @@ phpunit --debug DataProviderDebugTest ../_files/DataProviderDebugTest.php
 $_SERVER['argv'][1] = '--no-configuration';
 $_SERVER['argv'][2] = '--debug';
 $_SERVER['argv'][3] = 'DataProviderDebugTest';
-$_SERVER['argv'][4] = dirname(__FILE__).'/../_files/DataProviderDebugTest.php';
+$_SERVER['argv'][4] = dirname(__FILE__) . '/../_files/DataProviderDebugTest.php';
 
 require __DIR__ . '/../bootstrap.php';
 PHPUnit_TextUI_Command::main();
@@ -29,6 +29,6 @@ Starting test 'DataProviderDebugTest::testProvider with data set #5 (Binary Stri
 Starting test 'DataProviderDebugTest::testProvider with data set #6 (Binary String: 0x0009)'.
 .
 
-Time: %s, Memory: %sMb
+Time: %s, Memory: %s
 
 OK (7 tests, 7 assertions)

@@ -22,3 +22,5 @@ Tags
     spaceless
     use
     verbatim
+    with
+    deprecated

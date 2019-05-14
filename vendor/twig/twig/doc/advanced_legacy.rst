@@ -115,7 +115,7 @@ Globals
 A global variable is like any other template variable, except that it's
 available in all templates and macros::
 
-    $twig = new Twig_Environment($loader);
+    $twig = new \Twig\Environment($loader);
     $twig->addGlobal('text', new Text());
 
 You can then use the ``text`` variable anywhere in a template:
@@ -176,9 +176,9 @@ expected output:
     {# should displays Gjvt #}
 
 Adding a filter is as simple as calling the ``addFilter()`` method on the
-``Twig_Environment`` instance::
+``\Twig\Environment`` instance::
 
-    $twig = new Twig_Environment($loader);
+    $twig = new \Twig\Environment($loader);
     $twig->addFilter('rot13', new Twig_Filter_Function('str_rot13'));
 
 The second argument of ``addFilter()`` is an instance of ``Twig_Filter``.
@@ -227,12 +227,12 @@ The ``Twig_Filter`` classes take options as their last argument. For instance,
 if you want access to the current environment instance in your filter, set the
 ``needs_environment`` option to ``true``::
 
-    $filter = new Twig_Filter_Function('str_rot13', array('needs_environment' => true));
+    $filter = new Twig_Filter_Function('str_rot13', ['needs_environment' => true]);
 
 Twig will then pass the current environment as the first argument to the
 filter call::
 
-    function twig_compute_rot13(Twig_Environment $env, $string)
+    function twig_compute_rot13(\Twig\Environment $env, $string)
     {
         // get the current charset for instance
         $charset = $env->getCharset();
@@ -248,14 +248,14 @@ before printing. If your filter acts as an escaper (or explicitly outputs HTML
 or JavaScript code), you will want the raw output to be printed. In such a
 case, set the ``is_safe`` option::
 
-    $filter = new Twig_Filter_Function('nl2br', array('is_safe' => array('html')));
+    $filter = new Twig_Filter_Function('nl2br', ['is_safe' => ['html']]);
 
 Some filters may need to work on input that is already escaped or safe, for
 example when adding (safe) HTML tags to originally unsafe output. In such a
 case, set the ``pre_escape`` option to escape the input data before it is run
 through your filter::
 
-    $filter = new Twig_Filter_Function('somefilter', array('pre_escape' => 'html', 'is_safe' => array('html')));
+    $filter = new Twig_Filter_Function('somefilter', ['pre_escape' => 'html', 'is_safe' => ['html']]);
 
 Dynamic Filters
 ~~~~~~~~~~~~~~~
@@ -311,15 +311,15 @@ compilation, the generated PHP code is roughly equivalent to:
     <?php echo constant('DATE_W3C') ?>
 
 Adding a function is similar to adding a filter. This can be done by calling the
-``addFunction()`` method on the ``Twig_Environment`` instance::
+``addFunction()`` method on the ``\Twig\Environment`` instance::
 
-    $twig = new Twig_Environment($loader);
+    $twig = new \Twig\Environment($loader);
     $twig->addFunction('functionName', new Twig_Function_Function('someFunction'));
 
 You can also expose extension methods as functions in your templates::
 
-    // $this is an object that implements Twig_ExtensionInterface.
-    $twig = new Twig_Environment($loader);
+    // $this is an object that implements \Twig\Extension\ExtensionInterface.
+    $twig = new \Twig\Environment($loader);
     $twig->addFunction('otherFunction', new Twig_Function_Method($this, 'someMethod'));
 
 Functions also support ``needs_environment`` and ``is_safe`` parameters.
@@ -395,9 +395,9 @@ Registering a new tag
 ~~~~~~~~~~~~~~~~~~~~~
 
 Adding a tag is as simple as calling the ``addTokenParser`` method on the
-``Twig_Environment`` instance::
+``\Twig\Environment`` instance::
 
-    $twig = new Twig_Environment($loader);
+    $twig = new \Twig\Environment($loader);
     $twig->addTokenParser(new Project_Set_TokenParser());
 
 Defining a Token Parser
@@ -405,16 +405,16 @@ Defining a Token Parser
 
 Now, let's see the actual code of this class::
 
-    class Project_Set_TokenParser extends Twig_TokenParser
+    class Project_Set_TokenParser extends \Twig\TokenParser\AbstractTokenParser
     {
-        public function parse(Twig_Token $token)
+        public function parse(\Twig\Token $token)
         {
             $lineno = $token->getLine();
-            $name = $this->parser->getStream()->expect(Twig_Token::NAME_TYPE)->getValue();
-            $this->parser->getStream()->expect(Twig_Token::OPERATOR_TYPE, '=');
+            $name = $this->parser->getStream()->expect(\Twig\Token::NAME_TYPE)->getValue();
+            $this->parser->getStream()->expect(\Twig\Token::OPERATOR_TYPE, '=');
             $value = $this->parser->getExpressionParser()->parseExpression();
 
-            $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
+            $this->parser->getStream()->expect(\Twig\Token::BLOCK_END_TYPE);
 
             return new Project_Set_Node($name, $value, $lineno, $this->getTag());
         }
@@ -428,7 +428,7 @@ Now, let's see the actual code of this class::
 The ``getTag()`` method must return the tag we want to parse, here ``set``.
 
 The ``parse()`` method is invoked whenever the parser encounters a ``set``
-tag. It should return a ``Twig_Node`` instance that represents the node (the
+tag. It should return a ``\Twig\Node\Node`` instance that represents the node (the
 ``Project_Set_Node`` calls creating is explained in the next section).
 
 The parsing process is simplified thanks to a bunch of methods you can call
@@ -461,14 +461,14 @@ Defining a Node
 
 The ``Project_Set_Node`` class itself is rather simple::
 
-    class Project_Set_Node extends Twig_Node
+    class Project_Set_Node extends \Twig\Node\Node
     {
-        public function __construct($name, Twig_Node_Expression $value, $lineno, $tag = null)
+        public function __construct($name, \Twig\Node\Expression\AbstractExpression $value, $lineno, $tag = null)
         {
-            parent::__construct(array('value' => $value), array('name' => $name), $lineno, $tag);
+            parent::__construct(['value' => $value], ['name' => $name], $lineno, $tag);
         }
 
-        public function compile(Twig_Compiler $compiler)
+        public function compile(\Twig\Compiler $compiler)
         {
             $compiler
                 ->addDebugInfo($this)
@@ -492,15 +492,15 @@ developer generate beautiful and readable PHP code:
 * ``string()``: Writes a quoted string.
 
 * ``repr()``: Writes a PHP representation of a given value (see
-  ``Twig_Node_For`` for a usage example).
+  ``\Twig\Node\ForNode`` for a usage example).
 
 * ``addDebugInfo()``: Adds the line of the original template file related to
   the current node as a comment.
 
-* ``indent()``: Indents the generated code (see ``Twig_Node_Block`` for a
+* ``indent()``: Indents the generated code (see ``\Twig\Node\BlockNode`` for a
   usage example).
 
-* ``outdent()``: Outdents the generated code (see ``Twig_Node_Block`` for a
+* ``outdent()``: Outdents the generated code (see ``\Twig\Node\BlockNode`` for a
   usage example).
 
 .. _creating_extensions:
@@ -529,7 +529,7 @@ to host all the specific tags and filters you want to add to Twig.
 .. note::
 
     Before writing your own extensions, have a look at the Twig official
-    extension repository: http://github.com/twigphp/Twig-extensions.
+    extension repository: https://github.com/twigphp/Twig-extensions.
 
 An extension is a class that implements the following interface::
 
@@ -539,50 +539,48 @@ An extension is a class that implements the following interface::
          * Initializes the runtime environment.
          *
          * This is where you can load some file that contains filter functions for instance.
-         *
-         * @param Twig_Environment $environment The current Twig_Environment instance
          */
-        function initRuntime(Twig_Environment $environment);
+        function initRuntime(\Twig\Environment $environment);
 
         /**
          * Returns the token parser instances to add to the existing list.
          *
-         * @return array An array of Twig_TokenParserInterface or Twig_TokenParserBrokerInterface instances
+         * @return (Twig_TokenParserInterface|Twig_TokenParserBrokerInterface)[]
          */
         function getTokenParsers();
 
         /**
          * Returns the node visitor instances to add to the existing list.
          *
-         * @return array An array of Twig_NodeVisitorInterface instances
+         * @return \Twig\NodeVisitor\NodeVisitorInterface[]
          */
         function getNodeVisitors();
 
         /**
          * Returns a list of filters to add to the existing list.
          *
-         * @return array An array of filters
+         * @return \Twig\TwigFilter[]
          */
         function getFilters();
 
         /**
          * Returns a list of tests to add to the existing list.
          *
-         * @return array An array of tests
+         * @return \Twig\TwigTest[]
          */
         function getTests();
 
         /**
          * Returns a list of functions to add to the existing list.
          *
-         * @return array An array of functions
+         * @return \Twig\TwigFunction[]
          */
         function getFunctions();
 
         /**
          * Returns a list of operators to add to the existing list.
          *
-         * @return array An array of operators
+         * @return array<array> First array of unary operators, second array of binary operators
          */
         function getOperators();
 
@@ -602,16 +600,16 @@ An extension is a class that implements the following interface::
     }
 
 To keep your extension class clean and lean, it can inherit from the built-in
-``Twig_Extension`` class instead of implementing the whole interface. That
+``\Twig\Extension\AbstractExtension`` class instead of implementing the whole interface. That
 way, you just need to implement the ``getName()`` method as the
-``Twig_Extension`` provides empty implementations for all other methods.
+``\Twig\Extension\AbstractExtension`` provides empty implementations for all other methods.
 
 The ``getName()`` method must return a unique identifier for your extension.
 
 Now, with this information in mind, let's create the most basic extension
 possible::
 
-    class Project_Twig_Extension extends Twig_Extension
+    class Project_Twig_Extension extends \Twig\Extension\AbstractExtension
     {
         public function getName()
         {
@@ -630,7 +628,7 @@ extensions must be registered explicitly to be available in your templates.
 You can register an extension by using the ``addExtension()`` method on your
 main ``Environment`` object::
 
-    $twig = new Twig_Environment($loader);
+    $twig = new \Twig\Environment($loader);
     $twig->addExtension(new Project_Twig_Extension());
 
 Of course, you need to first load the extension file by either using
@@ -646,13 +644,13 @@ Globals
 Global variables can be registered in an extension via the ``getGlobals()``
 method::
 
-    class Project_Twig_Extension extends Twig_Extension
+    class Project_Twig_Extension extends \Twig\Extension\AbstractExtension
     {
         public function getGlobals()
         {
-            return array(
+            return [
                 'text' => new Text(),
-            );
+            ];
         }
 
         // ...
@@ -664,13 +662,13 @@ Functions
 Functions can be registered in an extension via the ``getFunctions()``
 method::
 
-    class Project_Twig_Extension extends Twig_Extension
+    class Project_Twig_Extension extends \Twig\Extension\AbstractExtension
     {
         public function getFunctions()
         {
-            return array(
+            return [
                 'lipsum' => new Twig_Function_Function('generate_lipsum'),
-            );
+            ];
         }
 
         // ...
@@ -683,13 +681,13 @@ To add a filter to an extension, you need to override the ``getFilters()``
 method. This method must return an array of filters to add to the Twig
 environment::
 
-    class Project_Twig_Extension extends Twig_Extension
+    class Project_Twig_Extension extends \Twig\Extension\AbstractExtension
     {
         public function getFilters()
         {
-            return array(
+            return [
                 'rot13' => new Twig_Filter_Function('str_rot13'),
-            );
+            ];
         }
 
         // ...
@@ -707,13 +705,13 @@ $twig->addFilter('rot13', new Twig_Filter_Function('Project_Twig_Extension::rot1
 You can also use ``Twig_Filter_Method`` instead of ``Twig_Filter_Function``
 when defining a filter to use a method::
 
-    class Project_Twig_Extension extends Twig_Extension
+    class Project_Twig_Extension extends \Twig\Extension\AbstractExtension
     {
         public function getFilters()
         {
-            return array(
+            return [
                 'rot13' => new Twig_Filter_Method($this, 'rot13Filter'),
-            );
+            ];
         }
 
         public function rot13Filter($string)
@@ -739,14 +737,14 @@ If some default core filters do not suit your needs, you can easily override
 them by creating your own extension. Just use the same names as the one you
 want to override::
 
-    class MyCoreExtension extends Twig_Extension
+    class MyCoreExtension extends \Twig\Extension\AbstractExtension
     {
         public function getFilters()
         {
-            return array(
+            return [
                 'date' => new Twig_Filter_Method($this, 'dateFilter'),
                 // ...
-            );
+            ];
         }
 
         public function dateFilter($timestamp, $format = 'F j, Y H:i')
@@ -764,7 +762,7 @@ Here, we override the ``date`` filter with a custom one. Using this extension
 is as simple as registering the ``MyCoreExtension`` extension by calling the
 ``addExtension()`` method on the environment instance::
 
-    $twig = new Twig_Environment($loader);
+    $twig = new \Twig\Environment($loader);
     $twig->addExtension(new MyCoreExtension());
 
 Tags
@@ -774,11 +772,11 @@ Adding a tag in an extension can be done by overriding the
 ``getTokenParsers()`` method. This method must return an array of tags to add
 to the Twig environment::
 
-    class Project_Twig_Extension extends Twig_Extension
+    class Project_Twig_Extension extends \Twig\Extension\AbstractExtension
     {
         public function getTokenParsers()
         {
-            return array(new Project_Set_TokenParser());
+            return [new Project_Set_TokenParser()];
         }
 
         // ...
@@ -794,19 +792,19 @@ Operators
 The ``getOperators()`` methods allows to add new operators. Here is how to add
 ``!``, ``||``, and ``&&`` operators::
 
-    class Project_Twig_Extension extends Twig_Extension
+    class Project_Twig_Extension extends \Twig\Extension\AbstractExtension
     {
         public function getOperators()
         {
-            return array(
-                array(
-                    '!' => array('precedence' => 50, 'class' => 'Twig_Node_Expression_Unary_Not'),
+            return [
+                [
+                    '!' => ['precedence' => 50, 'class' => '\Twig\Node\Expression\Unary\NotUnary'],
                 ),
-                array(
-                    '||' => array('precedence' => 10, 'class' => 'Twig_Node_Expression_Binary_Or', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
-                    '&&' => array('precedence' => 15, 'class' => 'Twig_Node_Expression_Binary_And', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
-                ),
-            );
+                [
+                    '||' => ['precedence' => 10, 'class' => '\Twig\Node\Expression\Binary\OrBinary', 'associativity' => \Twig\ExpressionParser::OPERATOR_LEFT],
+                    '&&' => ['precedence' => 15, 'class' => '\Twig\Node\Expression\Binary\AndBinary', 'associativity' => \Twig\ExpressionParser::OPERATOR_LEFT],
+                ],
+            ];
         }
 
         // ...
@@ -817,13 +815,13 @@ Tests
 
 The ``getTests()`` methods allows to add new test functions::
 
-    class Project_Twig_Extension extends Twig_Extension
+    class Project_Twig_Extension extends \Twig\Extension\AbstractExtension
     {
         public function getTests()
         {
-            return array(
+            return [
                 'even' => new Twig_Test_Function('twig_test_even'),
-            );
+            ];
         }
 
         // ...
@@ -855,14 +853,14 @@ following file structure in your test directory::
 
 The ``IntegrationTest.php`` file should look like this::
 
-    class Project_Tests_IntegrationTest extends Twig_Test_IntegrationTestCase
+    class Project_Tests_IntegrationTest extends \Twig\Test\IntegrationTestCase
     {
         public function getExtensions()
         {
-            return array(
+            return [
                 new Project_Twig_Extension1(),
                 new Project_Twig_Extension2(),
-            );
+            ];
         }
 
         public function getFixturesDir()
@@ -878,10 +876,10 @@ Node Tests
 ~~~~~~~~~~
 
 Testing the node visitors can be complex, so extend your test cases from
-``Twig_Test_NodeTestCase``. Examples can be found in the Twig repository
+``\Twig\Test\NodeTestCase``. Examples can be found in the Twig repository
 `tests/Twig/Node`_ directory.
 
-.. _`spl_autoload_register()`: http://www.php.net/spl_autoload_register
-.. _`rot13`:                   http://www.php.net/manual/en/function.str-rot13.php
+.. _`spl_autoload_register()`: https://secure.php.net/spl_autoload_register
+.. _`rot13`:                   https://secure.php.net/manual/en/function.str-rot13.php
 .. _`tests/Twig/Fixtures`:     https://github.com/twigphp/Twig/tree/master/test/Twig/Tests/Fixtures
 .. _`tests/Twig/Node`:         https://github.com/twigphp/Twig/tree/master/test/Twig/Tests/Node

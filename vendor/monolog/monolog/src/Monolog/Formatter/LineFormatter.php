@@ -11,7 +11,7 @@
 
 namespace Monolog\Formatter;
 
-use Exception;
+use Monolog\Utils;
 
 /**
  * Formats incoming records into a one-line string
@@ -78,6 +78,14 @@ class LineFormatter extends NormalizerFormatter
             }
         }
 
+
+        foreach ($vars['context'] as $var => $val) {
+            if (false !== strpos($output, '%context.'.$var.'%')) {
+                $output = str_replace('%context.'.$var.'%', $this->stringify($val), $output);
+                unset($vars['context'][$var]);
+            }
+        }
+
         if ($this->ignoreEmptyContextAndExtra) {
             if (empty($vars['context'])) {
                 unset($vars['context']);
@@ -94,6 +102,11 @@ class LineFormatter extends NormalizerFormatter
             if (false !== strpos($output, '%'.$var.'%')) {
                 $output = str_replace('%'.$var.'%', $this->stringify($val), $output);
             }
+        }
+
+        // remove leftover %extra.xxx% and %context.xxx% if any
+        if (false !== strpos($output, '%')) {
+            $output = preg_replace('/%(?:extra|context)\..+?%/', '', $output);
         }
 
         return $output;
@@ -114,18 +127,23 @@ class LineFormatter extends NormalizerFormatter
         return $this->replaceNewlines($this->convertToString($value));
     }
 
-    protected function normalizeException(Exception $e)
+    protected function normalizeException($e)
     {
+        // TODO 2.0 only check for Throwable
+        if (!$e instanceof \Exception && !$e instanceof \Throwable) {
+            throw new \InvalidArgumentException('Exception/Throwable expected, got '.gettype($e).' / '.Utils::getClass($e));
+        }
+
         $previousText = '';
         if ($previous = $e->getPrevious()) {
             do {
-                $previousText .= ', '.get_class($previous).'(code: '.$previous->getCode().'): '.$previous->getMessage().' at '.$previous->getFile().':'.$previous->getLine();
+                $previousText .= ', '.Utils::getClass($previous).'(code: '.$previous->getCode().'): '.$previous->getMessage().' at '.$previous->getFile().':'.$previous->getLine();
             } while ($previous = $previous->getPrevious());
         }
 
-        $str = '[object] ('.get_class($e).'(code: '.$e->getCode().'): '.$e->getMessage().' at '.$e->getFile().':'.$e->getLine().$previousText.')';
+        $str = '[object] ('.Utils::getClass($e).'(code: '.$e->getCode().'): '.$e->getMessage().' at '.$e->getFile().':'.$e->getLine().$previousText.')';
         if ($this->includeStacktraces) {
-            $str .= "\n[stacktrace]\n".$e->getTraceAsString();
+            $str .= "\n[stacktrace]\n".$e->getTraceAsString()."\n";
         }
 
         return $str;
@@ -151,9 +169,13 @@ class LineFormatter extends NormalizerFormatter
     protected function replaceNewlines($str)
     {
         if ($this->allowInlineLineBreaks) {
+            if (0 === strpos($str, '{')) {
+                return str_replace(array('\r', '\n'), array("\r", "\n"), $str);
+            }
+
             return $str;
         }
 
-        return strtr($str, array("\r\n" => ' ', "\r" => ' ', "\n" => ' '));
+        return str_replace(array("\r\n", "\r", "\n"), ' ', $str);
     }
 }

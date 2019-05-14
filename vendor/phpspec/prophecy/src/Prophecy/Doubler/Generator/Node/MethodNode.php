@@ -11,6 +11,7 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
+use Prophecy\Doubler\Generator\TypeHintReference;
 use Prophecy\Exception\InvalidArgumentException;
 
 /**
@@ -25,6 +26,8 @@ class MethodNode
     private $visibility = 'public';
     private $static = false;
     private $returnsReference = false;
+    private $returnType;
+    private $nullableReturnType = false;
 
     /**
      * @var ArgumentNode[]
@@ -32,13 +35,19 @@ class MethodNode
     private $arguments = array();
 
     /**
+     * @var TypeHintReference
+     */
+    private $typeHintReference;
+
+    /**
      * @param string $name
      * @param string $code
      */
-    public function __construct($name, $code = null)
+    public function __construct($name, $code = null, TypeHintReference $typeHintReference = null)
     {
         $this->name = $name;
         $this->code = $code;
+        $this->typeHintReference = $typeHintReference ?: new TypeHintReference();
     }
 
     public function getVisibility()
@@ -100,6 +109,55 @@ class MethodNode
         return $this->arguments;
     }
 
+    public function hasReturnType()
+    {
+        return null !== $this->returnType;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setReturnType($type = null)
+    {
+        if ($type === '' || $type === null) {
+            $this->returnType = null;
+            return;
+        }
+        $typeMap = array(
+            'double' => 'float',
+            'real' => 'float',
+            'boolean' => 'bool',
+            'integer' => 'int',
+        );
+        if (isset($typeMap[$type])) {
+            $type = $typeMap[$type];
+        }
+        $this->returnType = $this->typeHintReference->isBuiltInReturnTypeHint($type) ?
+            $type :
+            '\\' . ltrim($type, '\\');
+    }
+
+    public function getReturnType()
+    {
+        return $this->returnType;
+    }
+
+    /**
+     * @param bool $bool
+     */
+    public function setNullableReturnType($bool = true)
+    {
+        $this->nullableReturnType = (bool) $bool;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNullableReturnType()
+    {
+        return $this->nullableReturnType;
+    }
+
     /**
      * @param string $code
      */
@@ -122,8 +180,19 @@ class MethodNode
     {
         $this->code = sprintf(
             'return parent::%s(%s);', $this->getName(), implode(', ',
-                array_map(function (ArgumentNode $arg) { return '$'.$arg->getName(); }, $this->arguments)
+                array_map(array($this, 'generateArgument'), $this->arguments)
             )
         );
+    }
+
+    private function generateArgument(ArgumentNode $arg)
+    {
+        $argument = '$'.$arg->getName();
+
+        if ($arg->isVariadic()) {
+            $argument = '...'.$argument;
+        }
+
+        return $argument;
     }
 }

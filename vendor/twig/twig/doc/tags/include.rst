@@ -2,13 +2,37 @@
 ===========
 
 The ``include`` statement includes a template and returns the rendered content
-of that file into the current namespace:
+of that file:
 
 .. code-block:: jinja
 
     {% include 'header.html' %}
         Body
     {% include 'footer.html' %}
+
+.. note::
+
+    As of Twig 1.12, it is recommended to use the
+    :doc:`include<../functions/include>` function instead as it provides the
+    same features with a bit more flexibility:
+
+    * The ``include`` function is semantically more "correct" (including a
+      template outputs its rendered contents in the current scope; a tag should
+      not display anything);
+
+    * The rendered template can be more easily stored in a variable when using
+      the ``include`` function:
+
+      .. code-block:: jinja
+
+          {% set content %}{% include 'template.html' %}{% endset %}
+
+          {# vs #}
+
+          {% set content = include('template.html') %}
+
+    * The ``include`` function does not impose any specific order for
+      arguments thanks to :ref:`named arguments <named-arguments>`.
 
 Included templates have access to the variables of the active context.
 
@@ -50,14 +74,18 @@ The template name can be any valid Twig expression:
     {% include some_var %}
     {% include ajax ? 'ajax.html' : 'not_ajax.html' %}
 
-And if the expression evaluates to a ``Twig_Template`` object, Twig will use it
-directly::
+And if the expression evaluates to a ``\Twig\Template`` or a
+``\Twig\TemplateWrapper`` instance, Twig will use it directly::
 
     // {% include template %}
 
+    // deprecated as of Twig 1.28
     $template = $twig->loadTemplate('some_template.twig');
 
-    $twig->loadTemplate('template.twig')->display(array('template' => $template));
+    // as of Twig 1.28
+    $template = $twig->load('some_template.twig');
+
+    $twig->display('template.twig', ['template' => $template]);
 
 .. versionadded:: 1.2
     The ``ignore missing`` feature has been added in Twig 1.2.

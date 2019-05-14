@@ -3,8 +3,9 @@ namespace Faker\Test\Provider;
 
 use Faker\Provider\en_US\Text;
 use Faker\Generator;
+use PHPUnit\Framework\TestCase;
 
-class TextTest extends \PHPUnit_Framework_TestCase
+class TextTest extends TestCase
 {
     public function testTextMaxLength()
     {
@@ -24,10 +25,10 @@ class TextTest extends \PHPUnit_Framework_TestCase
      */
     public function testTextMaxIndex()
     {
-	$generator = new Generator();
+    $generator = new Generator();
         $generator->addProvider(new Text($generator));
         $generator->seed(0);
-	$generator->realText(200, 11);
+    $generator->realText(200, 11);
     }
 
     /**
@@ -35,7 +36,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
      */
     public function testTextMinIndex()
     {
-	$generator = new Generator();
+    $generator = new Generator();
         $generator->addProvider(new Text($generator));
         $generator->seed(0);
         $generator->realText(200, 0);
@@ -46,7 +47,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
      */
     public function testTextMinLength()
     {
-	$generator = new Generator();
+    $generator = new Generator();
         $generator->addProvider(new Text($generator));
         $generator->seed(0);
         $generator->realText(9);

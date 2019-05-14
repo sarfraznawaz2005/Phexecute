@@ -1,6 +1,11 @@
 ``macro``
 =========
 
+.. versionadded:: 1.12
+
+    The possibility to define default values for arguments in the macro
+    signature was added in Twig 1.12.
+
 Macros are comparable with functions in regular programming languages. They
 are useful to put often used HTML idioms into reusable elements to not repeat
 yourself.
@@ -9,16 +14,30 @@ Here is a small example of a macro that renders a form element:
 
 .. code-block:: jinja
 
-    {% macro input(name, value, type, size) %}
-        <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value|e }}" size="{{ size|default(20) }}" />
+    {% macro input(name, value, type = "text", size = 20) %}
+        <input type="{{ type }}" name="{{ name }}" value="{{ value|e }}" size="{{ size }}" />
     {% endmacro %}
 
-Macros differs from native PHP functions in a few ways:
+Each argument can have a default value (here ``text`` is the default value for
+``type`` if not provided in the call).
 
-* Default argument values are defined by using the ``default`` filter in the
-  macro body;
+.. note::
+
+    Before Twig 1.12, defining default argument values was done via the
+    ``default`` filter in the macro body:
+
+    .. code-block:: jinja
+
+        {% macro input(name, value, type, size) %}
+            <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value|e }}" size="{{ size|default(20) }}" />
+        {% endmacro %}
+
+Macros differ from native PHP functions in a few ways:
 
 * Arguments of a macro are always optional.
+
+* If extra positional arguments are passed to a macro, they end up in the
+  special ``varargs`` variable as a list of values.
 
 But as with PHP functions, macros don't have access to the current template
 variables.
@@ -27,6 +46,9 @@ variables.
 
     You can pass the whole context as an argument by using the special
     ``_context`` variable.
+
+Import
+------
 
 Macros can be defined in any template, and need to be "imported" before being
 used (see the documentation for the :doc:`import<../tags/import>` tag for more
@@ -79,5 +101,19 @@ import it locally:
             {{ forms.input(name, value, type, size) }}
         </div>
     {% endmacro %}
+
+Named Macro End-Tags
+--------------------
+
+Twig allows you to put the name of the macro after the end tag for better
+readability:
+
+.. code-block:: jinja
+
+    {% macro input() %}
+        ...
+    {% endmacro input %}
+
+Of course, the name after the ``endmacro`` word must match the macro name.
 
 .. seealso:: :doc:`from<../tags/from>`, :doc:`import<../tags/import>`

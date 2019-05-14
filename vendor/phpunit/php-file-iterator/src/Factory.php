@@ -13,20 +13,15 @@
  * an AppendIterator that contains an RecursiveDirectoryIterator for each given
  * path.
  *
- * @author    Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright Sebastian Bergmann <sebastian@phpunit.de>
- * @license   http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
- * @version   Release: @package_version@
- * @link      http://github.com/sebastianbergmann/php-file-iterator/tree
  * @since     Class available since Release 1.1.0
  */
 class File_Iterator_Factory
 {
     /**
-     * @param  array|string $paths
-     * @param  array|string $suffixes
-     * @param  array|string $prefixes
-     * @param  array        $exclude
+     * @param  array|string   $paths
+     * @param  array|string   $suffixes
+     * @param  array|string   $prefixes
+     * @param  array          $exclude
      * @return AppendIterator
      */
     public function getFileIterator($paths, $suffixes = '', $prefixes = '', array $exclude = array())
@@ -85,9 +80,9 @@ class File_Iterator_Factory
 
         foreach ($paths as $path) {
             if ($locals = glob($path, GLOB_ONLYDIR)) {
-                $_paths = array_merge($_paths, $locals);
+                $_paths = array_merge($_paths, array_map('realpath', $locals));
             } else {
-                $_paths[] = $path;
+                $_paths[] = realpath($path);
             }
         }
 

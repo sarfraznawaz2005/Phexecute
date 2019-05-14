@@ -9,3 +9,6 @@ storage/temp/*
 composer.lock
 .idea
 .idea/*
+vendor
+vendor/*
+.sonarlint

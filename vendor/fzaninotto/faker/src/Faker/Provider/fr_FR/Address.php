@@ -5,7 +5,7 @@ namespace Faker\Provider\fr_FR;
 class Address extends \Faker\Provider\Address
 {
     protected static $citySuffix = array('Ville', 'Bourg', '-les-Bains', '-sur-Mer', '-la-Forêt', 'boeuf', 'nec', 'dan');
-    protected static $streetPrefix = array('rue', 'rue', 'chemin', 'avenue', 'boulevard');
+    protected static $streetPrefix = array('rue', 'rue', 'chemin', 'avenue', 'boulevard', 'place', 'impasse');
     protected static $cityFormats = array(
         '{{lastName}}',
         '{{lastName}}',
@@ -74,6 +74,16 @@ class Address extends \Faker\Provider\Address
         array('92' => 'Hauts-de-Seine'), array('93' => 'Seine-Saint-Denis'), array('94' => 'Val-de-Marne'), array('95' => "Val-d'Oise"),
         array('971' => 'Guadeloupe'), array('972' => 'Martinique'), array('973' => 'Guyane'), array('974' => 'La Réunion'), array('976' => 'Mayotte')
      );
+
+    protected static $secondaryAddressFormats = array('Apt. ###', 'Suite ###', 'Étage ###', "Bât. ###", "Chambre ###");
+
+    /**
+     * @example 'Appt. 350'
+     */
+    public static function secondaryAddress()
+    {
+        return static::numerify(static::randomElement(static::$secondaryAddressFormats));
+    }
 
      /**
      * @example 'rue'

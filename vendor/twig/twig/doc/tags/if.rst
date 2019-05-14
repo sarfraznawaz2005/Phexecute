@@ -37,17 +37,25 @@ You can also use ``not`` to check for values that evaluate to ``false``:
         <p>You are not subscribed to our mailing list.</p>
     {% endif %}
 
-For multiple branches ``elseif`` and ``else`` can be used like in PHP. You can use
-more complex ``expressions`` there too:
+For multiple conditions, ``and`` and ``or`` can be used:
 
 .. code-block:: jinja
 
-    {% if kenny.sick %}
-        Kenny is sick.
-    {% elseif kenny.dead %}
-        You killed Kenny! You bastard!!!
+    {% if temperature > 18 and temperature < 27 %}
+        <p>It's a nice day for a walk in the park.</p>
+    {% endif %}
+
+For multiple branches ``elseif`` and ``else`` can be used like in PHP. You can
+use more complex ``expressions`` there too:
+
+.. code-block:: jinja
+
+    {% if product.stock > 10 %}
+       Available
+    {% elseif product.stock > 0 %}
+       Only {{ product.stock }} left!
     {% else %}
-        Kenny looks okay --- so far
+       Sold-out!
     {% endif %}
 
 .. note::
@@ -60,7 +68,10 @@ more complex ``expressions`` there too:
     ====================== ====================
     empty string           false
     numeric zero           false
+    NAN (Not A Number)     true
+    INF (Infinity)         true
     whitespace-only string true
+    string "0" or '0'      false
     empty array            false
     null                   false
     non-empty array        true

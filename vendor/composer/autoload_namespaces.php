@@ -6,16 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'phpDocumentor' => array($vendorDir . '/phpdocumentor/reflection-docblock/src'),
     'Ubench' => array($vendorDir . '/devster/ubench/src'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
-    'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
-    'Symfony\\Component\\VarDumper\\' => array($vendorDir . '/symfony/var-dumper'),
     'Slim' => array($vendorDir . '/slim/slim'),
-    'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'Pimple' => array($vendorDir . '/pimple/pimple/src'),
-    'Faker\\PHPUnit' => array($vendorDir . '/fzaninotto/faker/test'),
-    'Faker' => array($vendorDir . '/fzaninotto/faker/src'),
-    'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src'),
 );

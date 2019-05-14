@@ -29,6 +29,8 @@
     "phpunit/phpunit": "~4.6",
     "pimple/pimple": "*",
     "fzaninotto/faker": "*",
-    "devster/ubench": "~1.1.1"
+    "devster/ubench": "~1.1.1",
+    "drupol/phpermutations": "^1.3",
+    "tightenco/collect": "^5.8"
   }
 }

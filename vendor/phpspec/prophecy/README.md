@@ -1,5 +1,6 @@
 # Prophecy
 
+[![Stable release](https://poser.pugx.org/phpspec/prophecy/version.svg)](https://packagist.org/packages/phpspec/prophecy)
 [![Build Status](https://travis-ci.org/phpspec/prophecy.svg?branch=master)](https://travis-ci.org/phpspec/prophecy)
 
 Prophecy is a highly opinionated yet very powerful and flexible PHP object mocking
@@ -158,7 +159,7 @@ promise, there's plenty others you can use:
 
 - `ReturnPromise` or `->willReturn(1)` - returns a value from a method call
 - `ReturnArgumentPromise` or `->willReturnArgument($index)` - returns the nth method argument from call
-- `ThrowPromise` or `->willThrow` - causes the method to throw specific exception
+- `ThrowPromise` or `->willThrow($exception)` - causes the method to throw specific exception
 - `CallbackPromise` or `->will($callback)` - gives you a quick way to define your own custom logic
 
 Keep in mind, that you can always add even more promises by implementing
@@ -244,6 +245,7 @@ That's why Prophecy comes bundled with a bunch of other tokens:
 - `CallbackToken` or `Argument::that(callback)` - checks that the argument matches a custom callback
 - `AnyValueToken` or `Argument::any()` - matches any argument
 - `AnyValuesToken` or `Argument::cetera()` - matches any arguments to the rest of the signature
+- `StringContainsToken` or `Argument::containingString($value)` - checks that the argument contains a specific string value
 
 And you can add even more by implementing `TokenInterface` with your own custom classes.
 

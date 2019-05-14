@@ -2,6 +2,8 @@
 
 namespace Faker\Provider\it_IT;
 
+use Faker\Calculator\Luhn;
+
 class Company extends \Faker\Provider\Company
 {
     protected static $formats = array(
@@ -60,5 +62,17 @@ class Company extends \Faker\Provider\Company
         }
 
         return join($result, ' ');
+    }
+
+    /**
+     * Italian VAT number (Partita iva)
+     * @link https://it.wikipedia.org/wiki/Partita_IVA
+     * @return string
+     */
+    public static function vatId()
+    {
+        $code = sprintf('%s%03d', static::numerify('#######'), static::numberBetween(1, 121));
+
+        return sprintf('IT%s%d', $code, Luhn::computeCheckDigit($code));
     }
 }

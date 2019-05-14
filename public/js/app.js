@@ -6,8 +6,8 @@ jQuery.support.cors = true;
 
 var editor = ace.edit("code");
 editor.setShowPrintMargin(false);
-editor.setTheme("ace/theme/twilight");
-editor.session.setMode({path: "ace/mode/php", inline: true});
+editor.setTheme("ace/theme/dawn");
+editor.session.setMode({ path: "ace/mode/php", inline: true });
 editor.getSession().setTabSize(3);
 editor.getSession().setUseSoftTabs(true);
 editor.getSession().setUseWrapMode(true);
@@ -58,7 +58,7 @@ function runCode() {
     $loader.slideDown('fast');
     $codeResult.find(".panel-footer").slideUp('fast');
 
-    $.post('http/eval.php', {"code": code}, function (result) {
+    $.post('http/eval.php', { "code": code }, function (result) {
 
         $loader.slideUp('fast');
         $btn.attr('disabled', false);
@@ -123,7 +123,7 @@ function checkCode() {
     $codeResult.slideUp('fast');
     $loader.slideDown('fast');
 
-    $.post('http/check.php', {"code": code}, function (result) {
+    $.post('http/check.php', { "code": code }, function (result) {
 
         $loader.slideUp('fast');
         $btn.attr('disabled', false);
@@ -167,7 +167,7 @@ function fixCode() {
         scrollTop: $('#code').offset().top
     });
 
-    $.post('http/fix.php', {"code": code}, function (result) {
+    $.post('http/fix.php', { "code": code }, function (result) {
 
         $loader.slideUp('fast');
         $btn.attr('disabled', false);
@@ -186,12 +186,18 @@ function saveSnippet() {
     var $dialog = $('#modal-save');
     var code = encodeURIComponent(editor.getSession().getValue());
     var snippetName = $('#snippetName').val();
+    var categoryName = $('#categoryName').val();
+
+    if (!categoryName) {
+        alert("Category is required!");
+        return false;
+    }
 
     if (!snippetName || !code) return false;
 
     $dialog.modal('hide');
 
-    $.post('http/save.php', {"name": snippetName, "code": code}, function (result) {
+    $.post('http/save.php', { "name": snippetName, "code": code, "categoryName": categoryName }, function (result) {
         alert(result);
     });
 }
@@ -262,17 +268,23 @@ $('.code_entry a').click(function () {
 });
 
 // delete snippets
-$('ul.code_entry i.fa-times').click(function(){
-	var name = $(this).data('name');
-	var $li = $(this).closest('li');
-	
-	if (confirm('Are you sure you want to delete this snippet ?')) {
-		$.post('http/delete.php', {"name": name}, function (result) {
-			if (result) {
-				$li.remove();
-			}
-		});	
-	}
-	
-	return false;
+$('ul.code_entry i.fa-trash').click(function () {
+    var name = $(this).data('name');
+    var folder = $(this).data('folder');
+    var $li = $(this).closest('li');
+
+    if (confirm('Are you sure you want to delete this snippet ?')) {
+        $.post('http/delete.php', { "name": name, "folder": folder }, function (result) {
+            if (result) {
+                $li.remove();
+            }
+        });
+    }
+
+    return false;
+});
+
+$("select#categoryName").select2({
+    tags: true,
+    theme: "classic"
 });

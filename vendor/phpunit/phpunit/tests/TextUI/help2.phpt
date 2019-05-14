@@ -35,7 +35,7 @@ Logging Options:
 Test Selection Options:
 
   --filter <pattern>        Filter which tests to run.
-  --testsuite <pattern>     Filter which testsuite to run.
+  --testsuite <name>        Filter which testsuite to run.
   --group ...               Only runs tests from the specified group(s).
   --exclude-group ...       Exclude tests from the specified group(s).
   --list-groups             List available test groups.
@@ -78,6 +78,7 @@ Configuration Options:
   --bootstrap <file>        A "bootstrap" PHP file that is run before the tests.
   -c|--configuration <file> Read configuration from XML file.
   --no-configuration        Ignore default configuration file (phpunit.xml).
+  --no-coverage             Ignore code coverage configuration.
   --include-path <path(s)>  Prepend PHP's include_path with given path(s).
   -d key[=value]            Sets a php.ini value.
 

@@ -9,62 +9,100 @@
  * file that was distributed with this source code.
  */
 
-class Twig_Tests_Loader_ArrayTest extends PHPUnit_Framework_TestCase
+use Twig\Loader\ArrayLoader;
+
+class Twig_Tests_Loader_ArrayTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @group legacy
+     */
     public function testGetSource()
     {
-        $loader = new Twig_Loader_Array(array('foo' => 'bar'));
+        $loader = new ArrayLoader(['foo' => 'bar']);
 
         $this->assertEquals('bar', $loader->getSource('foo'));
     }
 
     /**
-     * @expectedException Twig_Error_Loader
+     * @group legacy
+     * @expectedException \Twig\Error\LoaderError
      */
     public function testGetSourceWhenTemplateDoesNotExist()
     {
-        $loader = new Twig_Loader_Array(array());
+        $loader = new ArrayLoader([]);
 
         $loader->getSource('foo');
     }
 
+    /**
+     * @expectedException \Twig\Error\LoaderError
+     */
+    public function testGetSourceContextWhenTemplateDoesNotExist()
+    {
+        $loader = new ArrayLoader([]);
+
+        $loader->getSourceContext('foo');
+    }
+
     public function testGetCacheKey()
     {
-        $loader = new Twig_Loader_Array(array('foo' => 'bar'));
+        $loader = new ArrayLoader(['foo' => 'bar']);
 
-        $this->assertEquals('bar', $loader->getCacheKey('foo'));
+        $this->assertEquals('foo:bar', $loader->getCacheKey('foo'));
+    }
+
+    public function testGetCacheKeyWhenTemplateHasDuplicateContent()
+    {
+        $loader = new ArrayLoader([
+            'foo' => 'bar',
+            'baz' => 'bar',
+        ]);
+
+        $this->assertEquals('foo:bar', $loader->getCacheKey('foo'));
+        $this->assertEquals('baz:bar', $loader->getCacheKey('baz'));
+    }
+
+    public function testGetCacheKeyIsProtectedFromEdgeCollisions()
+    {
+        $loader = new ArrayLoader([
+            'foo__' => 'bar',
+            'foo' => '__bar',
+        ]);
+
+        $this->assertEquals('foo__:bar', $loader->getCacheKey('foo__'));
+        $this->assertEquals('foo:__bar', $loader->getCacheKey('foo'));
     }
 
     /**
-     * @expectedException Twig_Error_Loader
+     * @expectedException \Twig\Error\LoaderError
      */
     public function testGetCacheKeyWhenTemplateDoesNotExist()
     {
-        $loader = new Twig_Loader_Array(array());
+        $loader = new ArrayLoader([]);
 
         $loader->getCacheKey('foo');
     }
 
     public function testSetTemplate()
     {
-        $loader = new Twig_Loader_Array(array());
+        $loader = new ArrayLoader([]);
         $loader->setTemplate('foo', 'bar');
 
-        $this->assertEquals('bar', $loader->getSource('foo'));
+        $this->assertEquals('bar', $loader->getSourceContext('foo')->getCode());
     }
 
     public function testIsFresh()
     {
-        $loader = new Twig_Loader_Array(array('foo' => 'bar'));
+        $loader = new ArrayLoader(['foo' => 'bar']);
         $this->assertTrue($loader->isFresh('foo', time()));
     }
 
     /**
-     * @expectedException Twig_Error_Loader
+     * @expectedException \Twig\Error\LoaderError
      */
     public function testIsFreshWhenTemplateDoesNotExist()
     {
-        $loader = new Twig_Loader_Array(array());
+        $loader = new ArrayLoader([]);
 
         $loader->isFresh('foo', time());
     }
@@ -72,12 +110,16 @@ class Twig_Tests_Loader_ArrayTest extends PHPUnit_Framework_TestCase
     public function testTemplateReference()
     {
         $name = new Twig_Test_Loader_TemplateReference('foo');
-        $loader = new Twig_Loader_Array(array('foo' => 'bar'));
+        $loader = new ArrayLoader(['foo' => 'bar']);
 
         $loader->getCacheKey($name);
-        $loader->getSource($name);
+        $loader->getSourceContext($name);
         $loader->isFresh($name, time());
-        $loader->setTemplate($name, 'foobar');
+        $loader->setTemplate($name, 'foo:bar');
+
+        // add a dummy assertion here to satisfy PHPUnit, the only thing we want to test is that the code above
+        // can be executed without crashing PHP
+        $this->addToAssertionCount(1);
     }
 }
 

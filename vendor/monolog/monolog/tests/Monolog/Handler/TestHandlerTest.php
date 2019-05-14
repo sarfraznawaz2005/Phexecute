@@ -26,18 +26,78 @@ class TestHandlerTest extends TestCase
     {
         $handler = new TestHandler;
         $record = $this->getRecord($level, 'test'.$method);
-        $this->assertFalse($handler->{'has'.$method}($record));
-        $this->assertFalse($handler->{'has'.$method.'Records'}());
+        $this->assertFalse($handler->hasRecords($level));
+        $this->assertFalse($handler->hasRecord($record, $level));
+        $this->assertFalse($handler->{'has'.$method}($record), 'has'.$method);
+        $this->assertFalse($handler->{'has'.$method.'ThatContains'}('test'), 'has'.$method.'ThatContains');
+        $this->assertFalse($handler->{'has'.$method.'ThatPasses'}(function ($rec) {
+            return true;
+        }), 'has'.$method.'ThatPasses');
+        $this->assertFalse($handler->{'has'.$method.'ThatMatches'}('/test\w+/'));
+        $this->assertFalse($handler->{'has'.$method.'Records'}(), 'has'.$method.'Records');
         $handler->handle($record);
 
-        $this->assertFalse($handler->{'has'.$method}('bar'));
-        $this->assertTrue($handler->{'has'.$method}($record));
-        $this->assertTrue($handler->{'has'.$method}('test'.$method));
-        $this->assertTrue($handler->{'has'.$method.'Records'}());
+        $this->assertFalse($handler->{'has'.$method}('bar'), 'has'.$method);
+        $this->assertTrue($handler->hasRecords($level));
+        $this->assertTrue($handler->hasRecord($record, $level));
+        $this->assertTrue($handler->{'has'.$method}($record), 'has'.$method);
+        $this->assertTrue($handler->{'has'.$method}('test'.$method), 'has'.$method);
+        $this->assertTrue($handler->{'has'.$method.'ThatContains'}('test'), 'has'.$method.'ThatContains');
+        $this->assertTrue($handler->{'has'.$method.'ThatPasses'}(function ($rec) {
+            return true;
+        }), 'has'.$method.'ThatPasses');
+        $this->assertTrue($handler->{'has'.$method.'ThatMatches'}('/test\w+/'));
+        $this->assertTrue($handler->{'has'.$method.'Records'}(), 'has'.$method.'Records');
 
         $records = $handler->getRecords();
         unset($records[0]['formatted']);
         $this->assertEquals(array($record), $records);
+    }
+
+    public function testHandlerAssertEmptyContext() {
+        $handler = new TestHandler;
+        $record  = $this->getRecord(Logger::WARNING, 'test', array());
+        $this->assertFalse($handler->hasWarning(array(
+            'message' => 'test',
+            'context' => array(),
+        )));
+
+        $handler->handle($record);
+
+        $this->assertTrue($handler->hasWarning(array(
+            'message' => 'test',
+            'context' => array(),
+        )));
+        $this->assertFalse($handler->hasWarning(array(
+            'message' => 'test',
+            'context' => array(
+                'foo' => 'bar'
+            ),
+        )));
+    }
+
+    public function testHandlerAssertNonEmptyContext() {
+        $handler = new TestHandler;
+        $record  = $this->getRecord(Logger::WARNING, 'test', array('foo' => 'bar'));
+        $this->assertFalse($handler->hasWarning(array(
+            'message' => 'test',
+            'context' => array(
+                'foo' => 'bar'
+            ),
+        )));
+
+        $handler->handle($record);
+
+        $this->assertTrue($handler->hasWarning(array(
+            'message' => 'test',
+            'context' => array(
+                'foo' => 'bar'
+            ),
+        )));
+        $this->assertFalse($handler->hasWarning(array(
+            'message' => 'test',
+            'context' => array(),
+        )));
     }
 
     public function methodProvider()

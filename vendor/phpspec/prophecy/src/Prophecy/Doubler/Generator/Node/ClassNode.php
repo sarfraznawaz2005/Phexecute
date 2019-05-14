@@ -11,6 +11,7 @@
 
 namespace Prophecy\Doubler\Generator\Node;
 
+use Prophecy\Exception\Doubler\MethodNotExtendableException;
 use Prophecy\Exception\InvalidArgumentException;
 
 /**
@@ -23,6 +24,7 @@ class ClassNode
     private $parentClass = 'stdClass';
     private $interfaces  = array();
     private $properties  = array();
+    private $unextendableMethods = array();
 
     /**
      * @var MethodNode[]
@@ -98,9 +100,18 @@ class ClassNode
         return $this->methods;
     }
 
-    public function addMethod(MethodNode $method)
+    public function addMethod(MethodNode $method, $force = false)
     {
-        $this->methods[$method->getName()] = $method;
+        if (!$this->isExtendable($method->getName())){
+            $message = sprintf(
+                'Method `%s` is not extendable, so can not be added.', $method->getName()
+            );
+            throw new MethodNotExtendableException($message, $this->getParentClass(), $method->getName());
+        }
+
+        if ($force || !isset($this->methods[$method->getName()])) {
+            $this->methods[$method->getName()] = $method;
+        }
     }
 
     public function removeMethod($name)
@@ -126,5 +137,33 @@ class ClassNode
     public function hasMethod($name)
     {
         return isset($this->methods[$name]);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getUnextendableMethods()
+    {
+        return $this->unextendableMethods;
+    }
+
+    /**
+     * @param string $unextendableMethod
+     */
+    public function addUnextendableMethod($unextendableMethod)
+    {
+        if (!$this->isExtendable($unextendableMethod)){
+            return;
+        }
+        $this->unextendableMethods[] = $unextendableMethod;
+    }
+
+    /**
+     * @param string $method
+     * @return bool
+     */
+    public function isExtendable($method)
+    {
+        return !in_array($method, $this->unextendableMethods);
     }
 }
