@@ -10,9 +10,6 @@ header('Content-Type: text/html; charset=utf-8');
 $code = urldecode($_POST['code']);
 
 if (!empty($code)) {
-    if (get_magic_quotes_gpc()) {
-        $code = stripslashes($code);
-    }
 
     ob_start();
 
@@ -38,7 +35,7 @@ if (!empty($code)) {
 
     $result = array(
        'time' => $timeTaken,
-       'line' => $error['line'],
+       'line' => $error['line'] ?? '',
        'result' => $result
     );
 
